@@ -1,0 +1,63 @@
+{
+  "name": "github-proxy",
+  "type": "module",
+  "private": true,
+  "description": "GitHub proxy on Cloudflare Workers",
+  "author": "mochaaP <npm@mochaa.ws>",
+  "license": "MIT",
+  "repository": "https://github.com/mchaNetwork/github-proxy",
+  "main": "dist/_worker.js",
+  "scripts": {
+    "build": "rimraf dist && parcel build",
+    "deploy": "bun run test && bun run build && wrangler pages deploy dist",
+    "lint": "eslint .",
+    "size": "size-limit",
+    "start": "wrangler pages dev dist --compatibility-date=2024-12-01",
+    "test": "bun run lint && bun run size"
+  },
+  "browserslist": "Firefox ESR, iOS >= 12.5, Chrome >= 87",
+  "dependencies": {
+    "nord": "nordtheme/nord",
+    "ress": "^5.0.2",
+    "worktop": "next"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "4.20250505.0",
+    "@mochaa/eslintrc": "0.1.12",
+    "@size-limit/preset-small-lib": "11.2.0",
+    "eslint": "9.26.0",
+    "parcel": "2.14.4",
+    "rimraf": "6.0.1",
+    "size-limit": "11.2.0",
+    "svgo": "3.3.2",
+    "typescript": "5.8.3",
+    "wrangler": "3.114.8"
+  },
+  "@parcel/transformer-css": {
+    "drafts": {
+      "nesting": true
+    }
+  },
+  "size-limit": [
+    {
+      "path": "src/_worker.ts",
+      "brotli": false
+    }
+  ],
+  "targets": {
+    "frontend": {
+      "source": [
+        "src/index.html",
+        "src/404.html"
+      ],
+      "distDir": "dist/"
+    },
+    "main": {
+      "source": "src/_worker.ts",
+      "context": "web-worker",
+      "outputFormat": "esmodule",
+      "includeNodeModules": true,
+      "optimize": true
+    }
+  }
+}
